@@ -1,0 +1,45 @@
+{%extends "base.html"%}
+
+{% block title %}LGA{%endblock%}
+
+{% block body %}
+    {%if message%}
+        <div>
+            <div>
+                LGA Does Not Exist
+            </div>
+            <div>
+                <a href="{%url 'bincom:index'%}">Go Back Home</a>
+            </div>
+        </div>
+    {%else%}
+    <h1>{{lga.lga_name}} LGA</h1>
+    <table>
+        
+        <thead>
+                <th class="name">Ward Name</th>
+                <th class="others">Ward ID</th>
+                <th class="others">LGA ID</th>
+                <th class="others">No. of Polling Units</th>
+                <th class="others">No. of Votes</th>
+        </thead>
+        <tbody>
+            {%for ward in wards%}
+            <div>
+                <tr>
+                    <td class="name"><a href="{{ward.get_absolute_url}}">{{ward.ward_name.title}}</a></td>
+                    <td class="others">{{ward.ward_id}}</td>
+                    <th class="others">{{ward.lga_id}}</th>
+                    <th class="others">{{ward.get_number_of_polling_units}}</th>
+                    <th class="others">{{ward.get_number_of_votes}}</th>
+                </tr>
+            </div>
+            {%endfor%}
+        </tbody>
+    </table>
+    <div class="total">
+        <div>Total:</div>
+        <div>{{lga.get_number_of_votes}} votes</div>
+    </div>
+    {%endif%}
+{%endblock%}

@@ -1,0 +1,77 @@
+{%extends "base.html"%}
+
+{% block title %}Polling Unit{%endblock%}
+
+{% block body %}
+    {% if polling_units%}
+        <table>
+            <thead>
+                    <th class="name">Polling Unit Name</th>
+                    <th class="others">Ward ID</th>
+                    <th class="others">LGA ID</th>
+                    <th class="others">Votes</th>
+            </thead>
+            <tbody>
+                {%for unit in polling_units%}
+                <div>
+                    <tr>
+                        <td class="name"><a href="{{unit.get_absolute_url}}">{{unit.polling_unit_name}}</a></td>
+                        <th class="others">{{unit.ward_id}}</th>
+                        <th class="others">{{unit.lga_id}}</th>
+                        <th class="others">{{unit.total_votes}}</th>
+                    </tr>
+                </div>
+                {%endfor%}
+            </tbody>
+        </table>
+
+        <div class="paginator">
+            {%if polling_units.has_previous%}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{polling_units.previous_page_number}}">Previous</a>
+            {%endif%}
+    
+            Page {{polling_units.number}} of {{polling_units.paginator.num_pages}}
+    
+            {%if polling_units.has_next%}
+                <a href="?page={{polling_units.next_page_number}}">Next</a>
+                <a href="?page={{polling_units.paginator.num_pages}}">&raquo; Last</a>
+            {%endif%}
+    
+        </div>
+
+    {%else%}
+        {%if message%}
+            <div>
+                <div>
+                    {{message}}
+                </div>
+                <div>
+                    <a href="{%url 'bincom:index'%}">Go Back Home</a>
+                </div>
+            </div>
+        {%else%}
+                <h1>{{unit.polling_unit_name.title}}</h1>
+                <table>
+                    <thead>
+                            <th class="name">Party Abbreviation</th>
+                            <th class="others">Polling Unit ID</th>
+                            <th class="others">Polling Unique ID</th>
+                            <th class="others">Party Score</th>
+                    </thead>
+                    <tbody>
+                        {%for result in results%}
+                        <div>
+                            <tr>
+                                <td class="name">{{result.party_abbreviation}}</td>
+                                <td class="others">{{result.polling_unit_uniqueid}}</td>
+                                <th class="others">{{unit.uniqueid}}</th>
+                                <th class="others">{{result.party_score}}</th>
+                            </tr>
+                        </div>
+                        {%endfor%}
+                    </tbody>
+                </table>
+        {%endif%}
+    {%endif%}
+{%endblock%}

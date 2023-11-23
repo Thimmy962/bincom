@@ -1,0 +1,108 @@
+{%extends "base.html"%}
+
+{% block title %}New Polling Unit{%endblock%}
+
+{% block body %}
+
+<div class="add_polling_unit_result">
+    {%if message%}
+        <div><h1>{{message}}</h1></div>
+    {%endif%}
+        <h1>Add New Result</h1>
+    <form action="{%url 'bincom:new_result'%}" method="post">
+        {%csrf_token%}
+        <div>
+            Select LGA
+
+            <select name="lga_id" id="lga" required>
+                <option value="" disabled>Select LGA</option>
+                <option value="Hello" disabled>--- Select Ward ---</option>
+                {%for lga in lgas%}
+                    <option value="{{lga.lga_id}}">{{lga.lga_name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+
+        <div>
+            Select Ward
+
+            <select name="ward_id" id="ward" required>
+                {%for ward in wards%}
+                    <option value="{{ward.ward_id}}">{{ward.ward_name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+
+        <div>
+            Select Polling Unit
+            <select name="polling_unit" id="polling_unit" required>
+
+            </select>
+        </div>
+
+        <div>
+            Choose Party
+            <select name="party" id="" required>
+                {%for party in parties%}
+                    <option value="{{party}}">{{party}}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div>
+            Party Score
+            <input type="number" name="party_score" id="" required>
+        </div>
+
+        <div>
+            <label for="">Add Another Result</label>
+            <input type="radio" value="Yes" name="another_result" required>Yes
+            <input type="radio" value="No" name="another_result" required>No
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var lga = document.getElementById('lga');
+            var ward = document.getElementById('ward');
+            var polling_unit = document.getElementById('polling_unit')
+
+            lga.addEventListener('change', function(){
+                var lga_id = lga.value;
+                ward.innerHTML = '<option value="">--- Select Ward ---</option>';
+                if(lga_id){
+                    fetch(`load_wards/${lga_id}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            data.forEach(war => {
+                                var option = document.createElement("option");
+                                option.value = war.ward_id;
+                                option.text = war.ward_name;
+                                ward.add(option)
+                            });
+                        })
+                }
+                })
+            ward.addEventListener('change', function(){
+                var ward_id = ward.value;
+                var lga_id = lga.value
+                console.log(ward_id)
+                console.log(lga_id)
+                polling_unit.innerHTML = '<option value="">--- Select Polling Unit ---</option>';
+                if(ward_id){
+                    fetch(`load_polling_units/${lga_id}/${ward_id}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            data.forEach(war => {
+                                var option = document.createElement("option");
+                                option.value = war.unit_id;
+                                option.text = war.unit_name;
+                                polling_unit.add(option)
+                            });
+                        })
+                }
+                })
+            })
+    </script>
+</div>
+
+{%endblock%}

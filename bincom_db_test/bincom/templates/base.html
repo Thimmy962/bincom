@@ -1,0 +1,38 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{%endblock%}</title>
+    <link rel="stylesheet" href="{%static 'static.css'%}">
+</head>
+<body>
+    <header>
+        <div>INEC</div>
+        <nav>
+            <ul>
+                <a href="{%url 'bincom:index'%}"><li>Home</li></a>
+                <div class="dropdown">
+                    <button class="dropdbtn">
+                        LGA
+                    </button>
+                    <div class="dropdown-content">
+                        {%for lga in lgas%}
+                            <a href="{{lga.get_absolute_url}}">{{lga.lga_name}}</a>
+                        {%endfor%}
+                    </div>
+
+                </div>
+                <a href="{%url 'bincom:ward_list'%}"><li>Ward</li></a>
+                <a href="{%url 'bincom:lga_list'%}"><li>All LGA</li></a>
+                <a href="{%url 'bincom:new_polling_unit'%}">New Polling Unit</a>
+                <a href="{%url 'bincom:new_result'%}">Add New Result</a>
+            </ul>
+        </nav>
+    </header>
+    <div id="container">
+        {% block body %}{%endblock%}
+    </div>
+</body>
+</html>

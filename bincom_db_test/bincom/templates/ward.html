@@ -1,0 +1,76 @@
+{%extends "base.html"%}
+
+{% block title %}WARD{%endblock%}
+
+{% block body %}
+    {% if wards%}
+        <table>
+            <thead>
+                    <th class="name">Ward Name</th>
+                    <th class="others">Ward ID</th>
+                    <th class="others">LGA ID</th>
+                    <th class="others">No. of Polling Units</th>
+            </thead>
+            <tbody>
+                {%for ward in wards%}
+                <div>
+                    <tr>
+                        <td class="name"><a href="{{ward.get_absolute_url}}">{{ward.ward_name}}</a></td>
+                        <th class="others">{{ward.ward_id}}</th>
+                        <th class="others">{{ward.lga_id}}</th>
+                        <th class="others">{{ward.get_number_of_polling_units}}</th>
+                    </tr>
+                </div>
+                {%endfor%}
+            </tbody>
+        </table>
+
+        <div class="paginator">
+            {%if wards.has_previous%}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{wards.previous_page_number}}">Previous</a>
+            {%endif%}
+    
+            Page {{wards.number}} of {{wards.paginator.num_pages}}
+    
+            {%if wards.has_next%}
+                <a href="?page={{wards.next_page_number}}">Next</a>
+                <a href="?page={{wards.paginator.num_pages}}">&raquo; Last</a>
+            {%endif%}
+    
+        </div>
+    {%else%}
+        {%if message%}
+            <div>
+                <div>
+                    {{message}}
+                </div>
+                <div>
+                    <a href="{%url 'bincom:index'%}">Go Back Home</a>
+                </div>
+            </div>
+        {%else%}
+                <h1>{{ward.ward_name}} Ward</h1>
+                <table>
+                    <thead>
+                            <th class="name">Polling Unit Name</th>
+                            <th class="others">Pollen ID</th>
+                            <th class="others">Ward ID</th>
+                            <th class="others">No. of Votes</th>
+                    </thead>
+                    <tbody>
+                        {%for unit in polling_units%}
+                        <div>
+                            <tr>
+                                <td class="name"><a href="{{unit.get_absolute_url}}">{{unit.polling_unit_name}}</a></td>
+                                <td class="others">{{unit.polling_unit_id}}</td>
+                                <th class="others">{{unit.ward_id}}</th>
+                                <th class="others">{{unit.total_votes}}</th>
+                            </tr>
+                        </div>
+                        {%endfor%}
+                    </tbody>
+                </table>
+        {%endif%}
+    {%endif%}
+{%endblock%}

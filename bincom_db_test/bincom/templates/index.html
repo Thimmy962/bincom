@@ -1,0 +1,44 @@
+{%extends "base.html"%}
+
+{% block title %}LGAs{%endblock%}
+
+{% block body %}
+    <table>
+        <thead>
+                <th class="name">LGA Name</th>
+                <th class="others">LGA ID</th>
+                <th class="others">State ID</th>
+                <th class="others">No. of Wards</th>
+        </thead>
+        <tbody>
+            {%for lga in lgas%}
+            <div>
+                <tr>
+                    <td class="name"><a href="{{lga.get_absolute_url}}">{{lga.lga_name.title}}</a></td>
+                    <th class="others">{{lga.lga_id}}</th>
+                    <th class="others">{{lga.state_id}}</th>
+                    <th class="others">{{lga.get_number_of_wards}}</th>
+                    <th class="others">{{lga.get_number_of_votes}}</th>
+                </tr>
+            </div>
+            {%endfor%}
+            <div>
+            </div>
+        </tbody>
+    </table>
+
+    <div class="paginator">
+        {%if lgas.has_previous%}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{lgas.previous_page_number}}">Previous</a>
+        {%endif%}
+
+        Page {{lgas.number}} of {{lgas.paginator.num_pages}}
+
+        {%if lgas.has_next%}
+            <a href="?page={{lgas.next_page_number}}">Next</a>
+            <a href="?page={{lgas.paginator.num_pages}}">&raquo; Last</a>
+        {%endif%}
+
+    </div>
+{%endblock%}
